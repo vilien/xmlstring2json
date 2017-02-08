@@ -1,21 +1,21 @@
 {
-  "name": "cxtkapi",
-  "version": "0.1.3",
-  "description": "微信小程序版淘点金api对接模块",
+  "name": "xmlstring2json",
+  "version": "0.1.1",
+  "description": "xml字符串转换json格式，适用于微信小程序",
   "main": "dist/index.js",
   "scripts": {
     "dist": "gulp dist"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vilien/cxtkapi.git"
+    "url": "git+https://github.com/vilien/xmlstring2json.git"
   },
   "author": "Vilien",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/vilien/cxtkapi/issues"
+    "url": "https://github.com/vilien/xmlstring2json/issues"
   },
-  "homepage": "https://github.com/vilien/cxtkapi#readme",
+  "homepage": "https://github.com/vilien/xmlstring2json#readme",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
