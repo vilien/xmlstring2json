@@ -121,7 +121,6 @@
   } else if (typeof module === 'object') {
     module.exports = xml2json;
   } else {
-    console.log('ROOT', root);
     root.xml2json = xml2json;
   }
 
