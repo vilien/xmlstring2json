@@ -1,4 +1,4 @@
-;(function(){
+﻿;(function(root){
 
   function Parser(xmlString) {
     this.xmlString = xmlString;
@@ -114,5 +114,15 @@
     }
   }
 
-  module.exports = xml2json;
-})();
+  if (typeof define === 'function' && define.amd) {
+    define(function() {
+      return xml2json;
+    });
+  } else if (typeof module === 'object') {
+    module.exports = xml2json;
+  } else {
+    console.log('ROOT', root);
+    root.xml2json = xml2json;
+  }
+
+})(typeof global === 'object' && global || typeof window === 'object' && window || this);

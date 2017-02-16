@@ -1,7 +1,7 @@
 {
   "name": "xmlstring2json",
   "description": "xml字符串转换json格式，适用于微信小程序",
-  "main": "dist/index.js",
+  "main": "dist/xml2json.js",
   "authors": [
     "Vilien"
   ],
