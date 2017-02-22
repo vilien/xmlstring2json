@@ -1,6 +1,6 @@
 {
   "name": "xmlstring2json",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "xml字符串转换json格式，适用于微信小程序",
   "main": "dist/xml2json.js",
   "scripts": {

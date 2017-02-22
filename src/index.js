@@ -38,7 +38,7 @@
 
     // text node
     text = this.readText(openTag.nodeName);
-    if (!/^\s+$/.test(text)) node['#text'] = text;
+    if (text && !/^\s+$/.test(text)) node['#text'] = text;
 
     // sibling
     if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
@@ -79,6 +79,7 @@
     var text = '', start = this.cursor,
       end = this.xmlString.indexOf('</' + nodeName + '>', start),
       cdStart = -1, cdEnd;
+    if (end < 0) return text;
     while ((cdStart = this.xmlString.indexOf('<![CDATA[', start)) > -1 && cdStart < end) {
       text += transEntities(this.xmlString.substring(start, cdStart));
       cdEnd = this.xmlString.indexOf(']]>', cdStart);
