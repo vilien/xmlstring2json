@@ -22,7 +22,7 @@
   };
 
   Parser.prototype.readNode = function(){
-    var parent, node = {}, text, nextTest = /^\s*<(?!\/|!\[CDATA\[)/,
+    var parent, node = {}, text, nextTest = /^[\s\n]*<(?!\/|!\[CDATA\[)/,
       openTagStop = this.xmlString.indexOf('>', this.cursor),
       openTag = this.readTag(this.xmlString.substring(this.cursor, openTagStop));
 
@@ -31,7 +31,7 @@
     this.cursor = openTagStop + 1; // '>'.length
 
     // child
-    if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 10))) {
+    if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
       this.next();
       Object.assign(node, this.readNode());
     }
@@ -41,7 +41,7 @@
     if (!/^\s+$/.test(text)) node['#text'] = text;
 
     // sibling
-    if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 10))) {
+    if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
       this.next();
       this.addChildren(parent, this.readNode());
     }
@@ -49,12 +49,15 @@
   };
 
   Parser.prototype.readTag = function(tag){
-    var nodeName, nodeAttr = {}, arr = tag.split(/\s+/), patt = /^([^\s]+)=(['"])?([^\s]+?)(\2)?$/;
-    nodeName = arr.shift();
-    arr.forEach(function(item){
-      var mat = item.match(patt);
-      nodeAttr['@' + mat[1]] = transEntities(mat[3]);
-    });
+    var nodeName = tag.split(/\s+/)[0], nodeAttr = {}, result = null,
+        patt = /([^\s]+)=(['"])([^"']+?)(\2)|([^\s]+)=([^\s"']+)/g;
+    while ((result = patt.exec(tag)) !== null) {
+      if (result[1]) {
+        nodeAttr['@' + result[1]] = transEntities(result[3]);
+      } else if (result[5]) {
+        nodeAttr['@' + result[5]] = transEntities(result[6]);
+      }
+    }
     return {nodeName, nodeAttr};
   };
 
