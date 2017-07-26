@@ -21,7 +21,7 @@
     Object.assign(this.jsonObj, this.readNode());
   };
 
-  Parser.prototype.readNode = function(){
+  Parser.prototype.readNode = function(sibling){
     var parent, node = {}, text, nextTest = /^[\s\n]*<(?!\/|!\[CDATA\[)/,
       openTagStop = this.xmlString.indexOf('>', this.cursor),
       openTag = this.readTag(this.xmlString.substring(this.cursor, openTagStop));
@@ -30,20 +30,23 @@
     parent = {[openTag.nodeName]: node};
     this.cursor = openTagStop + 1; // '>'.length
 
-    // child
-    if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
-      this.next();
-      Object.assign(node, this.readNode());
-    }
+    // not closed
+    if (this.xmlString.indexOf('/>', this.cursor - 2) !== this.cursor - 2) {
+      // child
+      if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
+        this.next();
+        Object.assign(node, this.readNode());
+      }
 
-    // text node
-    text = this.readText(openTag.nodeName);
-    if (text && !/^\s+$/.test(text)) node['#text'] = text;
+      // text node
+      text = this.readText(openTag.nodeName);
+      if (text && !/^\s+$/.test(text)) node['#text'] = text;
+    }
 
     // sibling
     if (nextTest.test(this.xmlString.substring(this.cursor, this.cursor + 1024))) {
       this.next();
-      this.addChildren(parent, this.readNode());
+      this.addChildren(sibling || parent, this.readNode(sibling || parent));
     }
     return parent;
   };
